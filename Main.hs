@@ -1,4 +1,4 @@
---runhaskell main.hs < LogoSkell.txt > prog.svg
+--CMD : runhaskell main.hs < LogoSkell.txt > prog.svg
 
 import Prelude hiding (Left, Right)
 
@@ -8,7 +8,7 @@ data Instruction = Forward Int
                   | Repeat Int [Instruction]
          deriving (Show, Read, Eq) -- on cree les classe Show Read et Eq avec deriving
 
---On définit des coordonnées polaires pour pouvoir utiliser les instructions Forward Left Right en effectuant des rotations pour afin obtenir le cercle.
+--On définit des coordonnées polaires pour pouvoir utiliser les instructions Forward Left Right en effectuant des rotations pour obtenir le cercle.
 --Ces positions seront definis avec un angle theta qui est égal à la position à l'instant + un certain angle t qui sera converti en fraction grâce à realToFrac
 
 ligneX :: Int -> Double -> Double -> Double
@@ -54,8 +54,7 @@ couleur c = case c of --Mettre des couleurs pour mieux se situer et de bien voir
     9->"cadetblue"
 cicl x = if x<9 then (x+1) else 0
 
-ligneSvg x1 y1 x2 y2 c= "<line x1=\"" ++(show x1)++ "\" y1=\"" ++(show y1)++ "\" x2=\"" ++(show x2)++ "\" y2=\"" ++(show y2)++ "\" stroke=\""++ (couleur c) ++"\" stroke-width=\"1\" />\n"
-
+ligneSvg x1 y1 x2 y2 c = "<line x1=\"" ++(show x1)++ "\" y1=\"" ++(show y1)++ "\" x2=\"" ++(show x2)++ "\" y2=\"" ++(show y2)++ "\" stroke=\""++ (couleur c) ++"\" stroke-width=\"1\" />\n"
 svgHead = "<?xml version=\"1.0\" encoding=\"utf-8\"?><svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\" width=\"500\" height=\"300\">\n<title>Absatou et Florian</title>\n"
 svgHeadParam (largeur, hauteur)= "<?xml version=\"1.0\" encoding=\"utf-8\"?><svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\" width=\""++(show largeur)++"\" height=\""++(show hauteur)++"\">\n<title>Absatou et Florian</title>\n"
 svgTail = "</svg>"
@@ -114,7 +113,8 @@ tracer :: [Instruction] -> (Double,Double,Double,Double) -> String
 tracer prgm (largeur,hauteur,minX,minY) = (svgHeadParam (largeur, hauteur))++(foldl1 (++) $ snd $ logoskell2svg prgm (Crayon minX minY 0 0) [])++svgTail
 
 main = do
- termStdin<-getLine
- putStrLn $ executerProgramme ( read (termStdin) :: [Instruction])
-
---La fontion main permet de recuperer les lignes converties en svg et d'en appliquer les instructions c'est à dire d'executer les instructions definies dans data pour pouvoir favoriser l'affichage
+ termStdin<-getLine -- On récupère l'entrée par lignes
+ putStrLn $ executerProgramme ( read (termStdin) :: [Instruction])  -- nous lisons les lignes en type Instruction, et on print/lance le programme
+--La fontion main permet de recuperer les lignes converties en svg et d'en appliquer
+--les instructions c'est à dire d'executer les instructions definies dans data pour
+--pouvoir favoriser l'affichage
