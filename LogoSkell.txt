@@ -1,1 +1,1 @@
-[Forward 100, Repeat 4 [Forward 50, Left 90], Forward 100]
+[ Repeat 36 [ Right 10, Repeat 8 [ Forward 25, Left 45 ] ] ]
